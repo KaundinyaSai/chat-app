@@ -1,0 +1,147 @@
+body {
+  margin: 0px;
+}
+
+#sideBar {
+  background-color: white;
+  border-right: 3px solid black;
+
+  width: 20%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+
+  z-index: 1;
+}
+
+#main {
+  width: 80%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+
+  background-color: beige;
+}
+
+#inputDiv {
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+
+  margin-bottom: 20px;
+}
+
+#messageInput {
+  width: 90%;
+  height: 40px;
+
+  font-size: 30px;
+
+  margin-left: 35px;
+}
+
+#inputDiv button {
+  height: 40px;
+  width: 40px;
+
+  position: absolute;
+  top: calc(50% - 20px);
+}
+
+ul {
+  list-style: none;
+}
+
+#userMessages {
+  width: 50%;
+  height: 90%;
+
+  float: right;
+  display: block;
+  margin-bottom: 10px;
+}
+#userList {
+  height: 98%;
+  position: relative;
+  display: grid;
+  grid-auto-rows: min-content;
+  justify-items: right;
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto;
+  margin-bottom: 0px;
+}
+
+#otherMessages {
+  width: 50%;
+  height: 90%;
+
+  float: right;
+  display: block;
+  margin-bottom: 10px;
+}
+#otherList {
+  height: 98%;
+  position: relative;
+  display: grid;
+  grid-auto-rows: min-content;
+  justify-items: left;
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto;
+  margin-bottom: 0px;
+}
+.messageContent {
+  position: relative;
+  background-color: rgb(67, 248, 67);
+  padding-inline: 10px;
+  padding-block: 10px 10px;
+  border-radius: 20px;
+  max-width: 300px;
+  min-width: 50px;
+  text-align: left;
+  margin: 10px;
+  display: inline-block;
+  word-wrap: break-word;
+  align-self: flex-end;
+}
+
+.messageContent::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 10%;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top: 10px solid rgb(67, 248, 67);
+}
+
+.otherMessageContent {
+  position: relative;
+  background-color: rgb(222, 222, 222);
+  padding-inline: 10px;
+  padding-block: 10px 10px;
+  border-radius: 20px;
+  max-width: 300px;
+  min-width: 50px;
+  text-align: left;
+  margin: 10px;
+  display: inline-block;
+  word-wrap: break-word;
+  align-self: flex-end;
+}
+
+.otherMessageContent::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 10%;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top: 10px solid rgb(222, 222, 222);
+}

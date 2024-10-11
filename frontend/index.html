@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+  </head>
+  <body>
+    <div id="sideBar"></div>
+
+    <div id="main">
+      <div id="inputDiv">
+        <form id="form">
+          <input
+            type="text"
+            placeholder="message"
+            autocomplete="off"
+            id="messageInput"
+          />
+          <button type="submit">></button>
+        </form>
+      </div>
+      <div id="userMessages">
+        <ul id="userList"></ul>
+      </div>
+      <div id="otherMessages">
+        <ul id="otherList"></ul>
+      </div>
+    </div>
+
+    <template id="userMessageTemplate">
+      <li class="userMessage">
+        <div class="messageContent">
+          <span class="username"></span><br />
+          <span class="messageText"></span>
+        </div>
+      </li>
+    </template>
+
+    <template id="otherMessageTemplate">
+      <li class="otherMessage">
+        <div class="otherMessageContent">
+          <span class="username"></span><br />
+          <span class="messageText"></span>
+        </div>
+      </li>
+    </template>
+
+    <script src="index.js"></script>
+  </body>
+</html>
