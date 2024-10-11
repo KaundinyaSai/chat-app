@@ -22,7 +22,7 @@ form.addEventListener("submit", (e) => {
 
 function addUserMessage(message) {
   const messageTemplate = document.getElementById("userMessageTemplate");
-  const ul = document.getElementById("userList");
+  const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
 
   newMsg.querySelector(".messageText").textContent = message;
@@ -32,7 +32,7 @@ function addUserMessage(message) {
 
 function addOtherMessage(message) {
   const messageTemplate = document.getElementById("otherMessageTemplate");
-  const ul = document.getElementById("otherList");
+  const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
 
   newMsg.querySelector(".messageText").textContent = message;
@@ -46,13 +46,3 @@ socket.on("sendMessage", (message) => {
   }
   isSender = false;
 });
-
-const userList = document.getElementById("userList");
-const otherList = document.getElementById("otherList");
-
-function syncScroll(source, target) {
-  target.scrollTop = source.scrollTop;
-}
-
-userList.addEventListener("scroll", () => syncScroll(userList, otherList));
-otherList.addEventListener("scroll", () => syncScroll(otherList, userList));
