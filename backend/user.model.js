@@ -9,6 +9,7 @@ const User = sequelize.define("User", {
   },
   username: {
     type: DataTypes.STRING,
+    collate: "utf8mb4_unicode_ci",
     unique: {
       msg: "username already in use",
     },
