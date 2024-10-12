@@ -52,7 +52,9 @@ router.post("/users/login", async (req, res) => {
     );
 
     // Send response
-    res.json({ token, user: { id: user.id, username: user.username } });
+    res
+      .status(201)
+      .json({ token, user: { id: user.id, username: user.username } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

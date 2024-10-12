@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
 
 const setupSocket = (server) => {
   const io = new Server(server);
@@ -10,8 +11,16 @@ const setupSocket = (server) => {
       console.log("Client disconnected");
     });
 
-    socket.on("sendMessage", (message) => {
-      io.emit("sendMessage", message);
+    socket.on("sendMessage", (token, message) => {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const username = decoded.username;
+
+        io.emit("sendMessage", { username, message });
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
     });
   });
 };

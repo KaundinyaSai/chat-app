@@ -1,3 +1,21 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) window.location.href = "./auth/login.html";
+
+  console.log("User logged in", token);
+
+  const payload = jwt_decode(token);
+  const expiresIn = payload.exp * 1000;
+  const timeToExpire = new Date(expiresIn);
+
+  console.log(`Token expires in ${timeToExpire}`);
+
+  if (Date.now() >= expiresIn) {
+    localStorage.removeItem("token");
+    window.location.href = "/login.html";
+  }
+});
+
 const socket = io();
 let isSender = false;
 
@@ -13,9 +31,21 @@ form.addEventListener("submit", (e) => {
   const message = document.getElementById("messageInput");
   if (message.value === "") return;
 
+  const token = localStorage.getItem("token");
+
+  // Token expiration check before sending a message
+  const payload = jwt_decode(token);
+  const expiresIn = payload.exp * 1000; // milliseconds
+
+  if (Date.now() >= expiresIn) {
+    localStorage.removeItem("token");
+    window.location.href = "/login.html";
+    return;
+  }
+
   isSender = true;
   addUserMessage(message.value);
-  socket.emit("sendMessage", message.value);
+  socket.emit("sendMessage", token, message.value);
 
   message.value = "";
 });
@@ -30,19 +60,22 @@ function addUserMessage(message) {
   ul.scrollTop = ul.scrollHeight;
 }
 
-function addOtherMessage(message) {
+function addOtherMessage(username, message) {
   const messageTemplate = document.getElementById("otherMessageTemplate");
   const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
 
   newMsg.querySelector(".messageText").textContent = message;
+  newMsg.querySelector(".username").textContent = username;
   ul.appendChild(newMsg);
   ul.scrollTop = ul.scrollHeight;
 }
 
-socket.on("sendMessage", (message) => {
+socket.on("sendMessage", (data) => {
+  const { username, message } = data;
+
   if (!isSender) {
-    addOtherMessage(message);
+    addOtherMessage(username, message);
   }
   isSender = false;
 });
