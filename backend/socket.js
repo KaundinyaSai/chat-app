@@ -11,7 +11,6 @@ const setupSocket = (server) => {
     });
 
     socket.on("sendMessage", (message) => {
-      console.log("Message:", message);
       io.emit("sendMessage", message);
     });
   });
