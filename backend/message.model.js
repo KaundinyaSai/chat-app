@@ -19,12 +19,12 @@ const Message = sequelize.define("Message", {
   senderId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "users",
+      model: User,
       key: "id",
     },
+    onDelete: "CASCADE",
   },
 });
-
 Message.belongsTo(User, { foreignKey: "senderId" });
 
 //hooks
