@@ -15,7 +15,51 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("token");
     window.location.href = "/login.html";
   }
+
+  getMessagesOnLoad(payload.id);
 });
+
+async function getMessagesOnLoad(userId) {
+  const ul = document.getElementById("messageList");
+  ul.innerHTML = "";
+
+  try {
+    const response = await axios.get("http://localhost:4001/api/messages");
+
+    if (response.status === 200) {
+      const messages = response.data;
+
+      messages.forEach((message) => {
+        if (message.senderId == userId) {
+          const messageTemplate = document.getElementById(
+            "userMessageTemplate"
+          );
+          const ul = document.getElementById("messageList");
+          const newMsg = messageTemplate.content.cloneNode(true);
+
+          newMsg.querySelector(".messageText").textContent = message.content;
+          ul.appendChild(newMsg);
+          ul.scrollTop = ul.scrollHeight;
+        } else {
+          const messageTemplate = document.getElementById(
+            "otherMessageTemplate"
+          );
+          const ul = document.getElementById("messageList");
+          const newMsg = messageTemplate.content.cloneNode(true);
+
+          newMsg.querySelector(".messageText").textContent = message.content;
+          newMsg.querySelector(".username").textContent = message.User.username;
+          ul.appendChild(newMsg);
+          ul.scrollTop = ul.scrollHeight;
+        }
+      });
+    } else {
+      console.log("Server error:", response.status);
+    }
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
 
 const socket = io();
 let isSender = false;

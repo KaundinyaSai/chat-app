@@ -3,6 +3,8 @@ import { DataTypes } from "sequelize";
 
 import { encryptMessage, decryptMessage } from "./message.utils.js";
 
+import User from "./user.model.js";
+
 const Message = sequelize.define("Message", {
   id: {
     type: DataTypes.INTEGER,
@@ -23,13 +25,23 @@ const Message = sequelize.define("Message", {
   },
 });
 
+Message.belongsTo(User, { foreignKey: "senderId" });
+
+//hooks
 Message.beforeCreate((message) => {
   message.content = encryptMessage(message.content);
 });
 
-Message.afterFind((message) => {
-  if (message && message.content) {
-    message.content = decryptMessage(message.content);
+Message.afterFind((result) => {
+  // Check if result is array bcuz findAll returns array of messages
+  if (Array.isArray(result)) {
+    result.forEach((message) => {
+      if (message.content) {
+        message.content = decryptMessage(message.content);
+      }
+    });
+  } else if (result && result.content) {
+    result.content = decryptMessage(result.content);
   }
 });
 
