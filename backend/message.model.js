@@ -1,6 +1,8 @@
 import sequelize from "./db.js";
 import { DataTypes } from "sequelize";
 
+import { encryptMessage, decryptMessage } from "./message.utils.js";
+
 const Message = sequelize.define("Message", {
   id: {
     type: DataTypes.INTEGER,
@@ -19,6 +21,16 @@ const Message = sequelize.define("Message", {
       key: "id",
     },
   },
+});
+
+Message.beforeCreate((message) => {
+  message.content = encryptMessage(message.content);
+});
+
+Message.afterFind((message) => {
+  if (message && message.content) {
+    message.content = decryptMessage(message.content);
+  }
 });
 
 export default Message;
