@@ -33,9 +33,9 @@ form.addEventListener("submit", (e) => {
 
   const token = localStorage.getItem("token");
 
-  // Token expiration check before sending a message
   const payload = jwt_decode(token);
-  const expiresIn = payload.exp * 1000; // milliseconds
+  const expiresIn = payload.exp * 1000;
+  const id = payload.id;
 
   if (Date.now() >= expiresIn) {
     localStorage.removeItem("token");
@@ -44,13 +44,13 @@ form.addEventListener("submit", (e) => {
   }
 
   isSender = true;
-  addUserMessage(message.value);
+  addUserMessage(message.value, id);
   socket.emit("sendMessage", token, message.value);
 
   message.value = "";
 });
 
-function addUserMessage(message) {
+async function addUserMessage(message, senderId) {
   const messageTemplate = document.getElementById("userMessageTemplate");
   const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
@@ -58,6 +58,21 @@ function addUserMessage(message) {
   newMsg.querySelector(".messageText").textContent = message;
   ul.appendChild(newMsg);
   ul.scrollTop = ul.scrollHeight;
+
+  try {
+    const response = await axios.post("http://localhost:4001/api/messages", {
+      content: message,
+      senderId,
+    });
+
+    if (response.status === 201) {
+      console.log("Message sent successfully");
+    } else {
+      console.log("Error sending message:", response.data.message);
+    }
+  } catch (error) {
+    console.log("Error:", error);
+  }
 }
 
 function addOtherMessage(username, message) {

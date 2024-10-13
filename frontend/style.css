@@ -95,3 +95,9 @@ ul {
 .username {
   color: blue;
 }
+
+#typingLi {
+  font-size: x-large;
+
+  margin-inline: 20px;
+}
