@@ -3,9 +3,9 @@ import User from "./user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const router = express();
+const Userrouter = express();
 
-router.post("/users/signup", async (req, res) => {
+Userrouter.post("/users/signup", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -26,7 +26,7 @@ router.post("/users/signup", async (req, res) => {
   }
 });
 
-router.post("/users/login", async (req, res) => {
+Userrouter.post("/users/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -61,4 +61,4 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-export default router;
+export default Userrouter;

@@ -8,7 +8,8 @@ import sequelize from "./db.js";
 
 import setupSocket from "./socket.js";
 
-import router from "./user.routes.js";
+import Userrouter from "./user.routes.js";
+import Messagerouter from "./message.routes.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -30,7 +31,8 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-app.use("/api", router);
+app.use("/api", Userrouter);
+app.use("/api", Messagerouter);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend", "index.html"));
