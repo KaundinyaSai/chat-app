@@ -3,13 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) window.location.href = "./auth/login.html";
 
-  console.log("User logged in", token);
-
   const payload = jwt_decode(token);
   const expiresIn = payload.exp * 1000;
   const timeToExpire = new Date(expiresIn);
-
-  console.log(`Token expires in ${timeToExpire}`);
 
   if (Date.now() >= expiresIn) {
     localStorage.removeItem("token");
@@ -63,10 +59,6 @@ async function getMessagesOnLoad(userId) {
 
 const socket = io();
 let isSender = false;
-
-socket.on("connect", () => {
-  console.log("Connected");
-});
 
 const form = document.getElementById("form");
 
