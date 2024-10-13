@@ -9,11 +9,13 @@ Userrouter.post("/users/signup", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
+    //hash passsword
     const hashedPassword = await bcrypt.hash(
       password,
       parseInt(process.env.SALT_ROUNDS)
     );
 
+    //create new user
     const newUser = await User.create({
       username,
       email,
@@ -30,10 +32,9 @@ Userrouter.post("/users/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Find the user by username
+    // Find user
     const user = await User.findOne({ where: { username: username } });
 
-    // Check if user exists
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -51,7 +52,6 @@ Userrouter.post("/users/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    // Send response
     res
       .status(201)
       .json({ token, user: { id: user.id, username: user.username } });

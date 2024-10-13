@@ -11,8 +11,8 @@ const Message = sequelize.define("Message", {
   },
   content: {
     type: DataTypes.TEXT,
-    collate: "utf8mb4_unicode_ci",
     allowNull: false,
+    collate: "utf8mb4_general_cs",
   },
   senderId: {
     type: DataTypes.INTEGER,

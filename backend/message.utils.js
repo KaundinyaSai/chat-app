@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 const alg = "aes-256-cbc"; // Advanced Encryption Standard(standard for encrption) - 256(key size in bytes) - Cipher block chaining(idk what cbc means).
-const secret = process.env.AES_SECRET || "IKicanusecryptotomake32bitkeyno";
+const secret = process.env.AES_SECRET;
 const iv = crypto.randomBytes(16); // init vector
 
 function encryptMessage(message) {
