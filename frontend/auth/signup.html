@@ -126,6 +126,11 @@
       button:hover {
         background: #28ba71;
       }
+
+      #errorMessage {
+        text-align: center;
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -170,6 +175,8 @@
       </div>
 
       <button>Sign up</button>
+      <br />
+      <p id="errorMessage"></p>
     </form>
 
     <script>
@@ -204,6 +211,8 @@
             "Error:",
             error.response ? error.response.data : error.message
           );
+          document.getElementById("errorMessage").textContent =
+            error.response.data.message;
         }
       }
     </script>
