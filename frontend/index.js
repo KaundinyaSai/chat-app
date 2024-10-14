@@ -33,7 +33,13 @@ async function getMessagesOnLoad(userId) {
           const ul = document.getElementById("messageList");
           const newMsg = messageTemplate.content.cloneNode(true);
 
+          const createdAtTime = new Date(message.createdAt).toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          );
+
           newMsg.querySelector(".messageText").textContent = message.content;
+          newMsg.querySelector(".userTime").textContent = createdAtTime;
           ul.appendChild(newMsg);
           ul.scrollTop = ul.scrollHeight;
         } else {
@@ -43,8 +49,14 @@ async function getMessagesOnLoad(userId) {
           const ul = document.getElementById("messageList");
           const newMsg = messageTemplate.content.cloneNode(true);
 
+          const createdAtTime = new Date(message.createdAt).toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          );
+
           newMsg.querySelector(".messageText").textContent = message.content;
           newMsg.querySelector(".username").textContent = message.User.username;
+          newMsg.querySelector(".otherTime").textContent = createdAtTime;
           ul.appendChild(newMsg);
           ul.scrollTop = ul.scrollHeight;
         }
@@ -92,11 +104,22 @@ async function addUserMessage(message, senderId) {
   const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
 
+  //getCurrentTime
+  const createdAt = new Date();
+  const createdAtTime = createdAt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   newMsg.querySelector(".messageText").textContent = message;
+  newMsg.querySelector(".userTime").textContent = createdAtTime;
+
   ul.appendChild(newMsg);
+
   ul.scrollTop = ul.scrollHeight;
 
   try {
+    // Send message to server
     const response = await axios.post("http://localhost:4001/api/messages", {
       content: message,
       senderId,
@@ -116,6 +139,15 @@ function addOtherMessage(username, message) {
   const messageTemplate = document.getElementById("otherMessageTemplate");
   const ul = document.getElementById("messageList");
   const newMsg = messageTemplate.content.cloneNode(true);
+
+  //getCurrentTime
+  const createdAt = new Date();
+  const createdAtTime = createdAt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  newMsg.querySelector(".otherTime").textContent = createdAtTime;
 
   newMsg.querySelector(".messageText").textContent = message;
   newMsg.querySelector(".username").textContent = username;
