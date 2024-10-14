@@ -131,3 +131,69 @@ socket.on("sendMessage", (data) => {
   }
   isSender = false;
 });
+
+//typing indicators
+const input = document.getElementById("messageInput");
+const sideBar = document.getElementById("sideBar");
+let typingTimeouts = {}; // To store timeouts for each user
+
+// Handle user input for typing event
+input.addEventListener("input", () => {
+  const token = localStorage.getItem("token");
+  socket.emit("typing", token);
+});
+
+socket.on("typing", (data) => {
+  const { username } = data;
+
+  // Check if an indicator for this user already exists
+  let existingIndicator = document.getElementById(`${username}-typing`);
+
+  if (existingIndicator) {
+    existingIndicator.textContent = `${username} is typing...`;
+  } else {
+    const newTypingIndicator = document.createElement("h2");
+    newTypingIndicator.textContent = `${username} is typing...`;
+    newTypingIndicator.id = `${username}-typing`; // Unique ID for this user's typing indicator
+    newTypingIndicator.style.textAlign = "center";
+    sideBar.appendChild(newTypingIndicator);
+  }
+
+  // Clear previous timeout for this user
+  clearTimeout(typingTimeouts[username]);
+
+  // Set a timeout to clear the typing indicator after 3 seconds of inactivity
+  typingTimeouts[username] = setTimeout(() => {
+    const userIndicator = document.getElementById(`${username}-typing`);
+    if (userIndicator) {
+      sideBar.removeChild(userIndicator);
+    }
+    delete typingTimeouts[username]; // Clean up the timeout record
+  }, 3000);
+});
+
+// Clear the indicator when "Enter" is pressed
+input.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    const token = localStorage.getItem("token");
+    socket.emit("stopTyping", token); // Optionally emit stopTyping event to notify others
+
+    // Clear the local user's typing indicator immediately
+    clearUserTypingIndicator();
+  }
+});
+
+// function to clear the current user's typing indicator
+function clearUserTypingIndicator() {
+  const token = localStorage.getItem("token");
+  const decoded = jwt_decode(token);
+  const username = decoded.username;
+
+  const userIndicator = document.getElementById(`${username}-typing`);
+  if (userIndicator) {
+    sideBar.removeChild(userIndicator);
+  }
+
+  clearTimeout(typingTimeouts[username]); // Clear timeout for current user
+  delete typingTimeouts[username]; // Clean up the timeout record
+}
