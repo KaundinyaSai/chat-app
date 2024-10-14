@@ -9,7 +9,7 @@ const User = sequelize.define("User", {
   },
   username: {
     type: DataTypes.STRING,
-    collate: "utf8mb4_general_cs", //bassically all things like emojis and such are allowd and is case-sensitive('a' is diffrent from 'A')
+    collate: "utf8mb4_general_cs", //bassically all things like emojis and such are alowed
     unique: {
       msg: "username already in use",
     },
